@@ -13,7 +13,7 @@ from tin_lite.workflow_qualification import CASE_PROJECT, Qualification, assess_
 ROOT = Path(__file__).parents[1]
 PACKAGE = ROOT / "workflow_packages/organic.brand_findability"
 RESOURCES = PACKAGE / "skills/brand-findability"
-FIXTURES = ROOT / "tests/fixtures/brand_findability"
+FIXTURES = ROOT / "workflow_evals/organic.brand_findability/fixtures"
 CASES = ROOT / "workflow_evals/organic.brand_findability/qualification.json"
 DOMAIN = "harbor.so"
 
