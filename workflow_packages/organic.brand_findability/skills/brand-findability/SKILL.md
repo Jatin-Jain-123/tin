@@ -53,7 +53,9 @@ anything else except the fetches in step 3.
 ## 2. Search each query once
 
 Run one public web search per planned query, in plan order, with no site filters and no
-quotes; a listener types plain words. Read up to the first ten organic results. Label each
+quotes; a listener types plain words. Make each search its own call that carries only that
+query: results from a call that combined several queries can't be told apart, so those queries
+would be unmeasured. Read up to the first ten organic results. Label each
 with one kind from SCORE.md from its title, URL and snippet. When a result could be either
 this brand or a namesake and the snippet cannot settle it, spend a fetch from step 3 on it.
 
