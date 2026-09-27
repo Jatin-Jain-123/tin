@@ -107,11 +107,23 @@ def _spoken_forms(brand):
     return forms
 
 
+def _fold(word):
+    # British and American spellings are one word to a listener: analyser, analyzer.
+    return re.sub(r"\W", "", word.lower()).replace("z", "s")
+
+
+def category_terms(brand, category):
+    """The category's words that the name doesn't already say, in order."""
+    named = {_fold(word) for word in brand.split()}
+    words = _SPACE.sub(" ", category or "").strip()[:200].split()
+    return [word for word in words if _fold(word) and _fold(word) not in named]
+
+
 def build_queries(brand, domain, category="", variants=(), limit=12):
     """The fixed query set for this run: what a person who only heard the name would type."""
     brand = _clean(brand)
     domain = bare_host(domain)
-    category = _SPACE.sub(" ", category or "").strip()[:200]
+    category = " ".join(category_terms(brand, category))
     if not isinstance(limit, int) or not 4 <= limit <= MAX_QUERIES:
         raise ValueError(f"limit must be 4 to {MAX_QUERIES}")
     spoken = [*_spoken_forms(brand), *(_clean(item) for item in variants)][:MAX_VARIANTS]
@@ -210,7 +222,8 @@ def choose_fixes(queries, statuses, results, homepage_title=None, category=""):
         repaired = [item["query"] for item in lost if item["kind"] in ("name", "spoken")]
         candidates.append(("say_the_query", repaired, best["query"]))
     title = (homepage_title or "").lower()
-    words = [word for word in re.findall(r"[a-z0-9]+", category.lower()) if len(word) > 2]
+    extra = " ".join(category_terms(name["query"], category)).lower()
+    words = [word for word in re.findall(r"[a-z0-9]+", extra) if len(word) > 2]
     if name in lost and homepage_title is not None and words and not all(
         word in title for word in words
     ):

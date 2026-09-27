@@ -100,6 +100,20 @@ def test_spoken_forms_split_and_join_names_and_duplicates_collapse(score):
     assert [item["query"] for item in two][:2] == ["Ship Yard", "ShipYard"]
 
 
+def test_the_category_query_does_not_repeat_the_name(score):
+    # The first live run searched "Chemical Equipment Analyser equipment CSV analyzer".
+    brand = "Chemical Equipment Analyser"
+    assert score["category_terms"](brand, "equipment CSV analyzer") == ["CSV"]
+    queries = score["build_queries"](brand, "example.github.io", "equipment CSV analyzer")
+    assert queries[1] == {"query": f"{brand} CSV", "kind": "name_category", "weight": 2}
+    only_the_name = score["build_queries"](brand, "example.github.io", "chemical equipment")
+    assert "name_category" not in {item["kind"] for item in only_the_name}
+    statuses = {item["query"]: "missing" for item in queries}
+    rows = {item["query"]: [] for item in queries}
+    title = "Chemical Equipment Analyser: CSV analytics and PDF reports"
+    assert score["choose_fixes"](queries, statuses, rows, title, "equipment CSV analyzer") == []
+
+
 def test_the_bare_name_is_always_first_and_the_plan_is_bounded(score):
     many = [f"harb{index}r" for index in range(20)]
     queries = score["build_queries"]("Harbor", DOMAIN, "invoice app", many[:6], limit=4)

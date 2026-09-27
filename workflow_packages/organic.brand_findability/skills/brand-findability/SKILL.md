@@ -26,6 +26,8 @@ came from.
 2. `reports/GROWTH_ONBOARDING_PLAN.md`: the H1 `# Growth plan for <name>` names the business,
    and `## The business` states what it is. Take the category as the two to four words a
    person would add to the name to mean this product ("preview deploys", "invoice app").
+   `build_queries` drops the words the name already says, so a name like "Invoice Hub" keeps
+   only "app".
 3. The newest `reports/organic-audit/*/evidence.json` (`ls -t`): `ai_visibility.panel.name`,
    `ai_visibility.panel.site_hosts` and `scope.url`.
 4. `wiki/INDEX.md`: the H1 names the project, and the `## Product` block and `## Sources` name
